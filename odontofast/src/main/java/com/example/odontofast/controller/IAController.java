@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/dentista/ia")
+@RequestMapping({"/dentista/ia", "/admin/ia"})  // Mapeia para ambas roles
 public class IAController {
 
     private final IAService iaService;
@@ -15,7 +15,6 @@ public class IAController {
         this.iaService = iaService;
     }
 
-    // Novos métodos para o Assistente de Anamnese
     @GetMapping("/anamnese-assistente")
     public String paginaAnamneseAssistente() {
         return "anamnese-assistente";

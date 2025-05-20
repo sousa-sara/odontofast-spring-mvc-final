@@ -21,7 +21,8 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public String dashboard() {
-        return "admin-dashboard";
+        // Redirecionar para a página de monitoramento
+        return "redirect:/admin/monitoring";
     }
 
     @GetMapping("/auth-debug")

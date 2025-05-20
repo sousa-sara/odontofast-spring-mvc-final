@@ -37,6 +37,9 @@ public class SecurityConfig {
                         .requestMatchers("/", "/select-profile", "/assets/**", "/error", "/check-roles").permitAll()
                         .requestMatchers("/admin/login", "/admin/process-login").permitAll()
                         .requestMatchers("/dentista/login", "/dentista/cadastro").permitAll()
+                        // Permissão de acesso aos endpoints do Actuator somente por um ADMIN
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/monitoring/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/dentista/**").hasAnyRole("DENTISTA", "ADMIN")
                         .anyRequest().authenticated()

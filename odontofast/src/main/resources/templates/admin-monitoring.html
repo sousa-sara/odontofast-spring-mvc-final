@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="fragments/head"></head>
+<body>
+<div class="dashboard">
+  <div th:replace="~{fragments/menu-sidebar :: menu-sidebar(activePage='monitoring')}"></div>
+  <div class="main-content">
+    <div>
+      <h1 class="fs-2 mb-4">Monitoramento do Sistema</h1>
+
+      <!-- Componentes de Saúde -->
+      <div class="table-responsive" th:if="${health != null && T(org.springframework.boot.actuate.health.CompositeHealth).isInstance(health) && healthComponents != null}">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th>Componente</th>
+            <th>Status</th>
+            <th>Detalhes</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="component : ${healthComponents}">
+            <td th:text="${component.key}">Nome do Componente</td>
+            <td>
+        <span class="badge"
+              th:if="${component.value.status != null}"
+              th:classappend="${component.value.status.code == 'UP'} ? 'bg-success' :
+                            (${component.value.status.code == 'DOWN'} ? 'bg-danger' : 'bg-warning')"
+              th:text="${component.value.status.code}">Status</span>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-secondary" type="button"
+                      th:attr="data-bs-target='#details-' + ${component.key}"
+                      data-bs-toggle="collapse">
+                Ver Detalhes
+              </button>
+              <div th:id="'details-' + ${component.key}" class="collapse mt-2">
+                <div class="card card-body bg-light">
+                  <pre th:text="${component.value}">Detalhes</pre>
+                </div>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-info" th:unless="${health != null && T(org.springframework.boot.actuate.health.CompositeHealth).isInstance(health) && healthComponents != null}">
+        Nenhum detalhe de componente disponível. Verifique a configuração do actuator para mostrar detalhes.
+      </div>
+      <!-- Script para manusear a seleção de métricas -->
+      <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+          const metricSelector = document.getElementById('metricSelector');
+          const refreshMetricBtn = document.getElementById('refreshMetric');
+          const metricDetailsDiv = document.getElementById('metricDetails');
+
+          // Habilitar/desabilitar o botão de atualizar com base na seleção
+          metricSelector.addEventListener('change', function() {
+            refreshMetricBtn.disabled = !this.value;
+            if (this.value) {
+              loadMetricDetails(this.value);
+            } else {
+              metricDetailsDiv.classList.add('d-none');
+            }
+          });
+
+          // Carregar detalhes ao clicar no botão de atualizar
+          refreshMetricBtn.addEventListener('click', function() {
+            if (metricSelector.value) {
+              loadMetricDetails(metricSelector.value);
+            }
+          });
+
+          // Função para carregar os detalhes da métrica via AJAX
+          function loadMetricDetails(metricName) {
+            fetch(`/admin/monitoring/metric?name=${encodeURIComponent(metricName)}`)
+                    .then(response => response.text())
+                    .then(html => {
+                      metricDetailsDiv.innerHTML = html;
+                      metricDetailsDiv.classList.remove('d-none');
+                    })
+                    .catch(error => {
+                      console.error('Erro ao carregar detalhes da métrica:', error);
+                      metricDetailsDiv.innerHTML = `<div class="alert alert-danger">Erro ao carregar detalhes: ${error.message}</div>`;
+                      metricDetailsDiv.classList.remove('d-none');
+                    });
+          }
+        });
+      </script>
+
+      <!-- Informações da Aplicação -->
+      <div class="card p-4 mb-4">
+        <h2 class="titulo">Informações da Aplicação</h2>
+
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+            <tr th:if="${info.containsKey('java')}">
+              <th scope="row">Java</th>
+              <td>
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <strong>Versão: </strong>
+                    <span th:text="${info.get('java').version}">N/A</span>
+                  </li>
+                  <li>
+                    <strong>Vendor: </strong>
+                    <span th:if="${info.get('java').vendor != null}"
+                          th:text="${info.get('java').vendor.name}">N/A</span>
+                  </li>
+                  <li>
+                    <strong>Runtime: </strong>
+                    <span th:if="${info.get('java').runtime != null}"
+                          th:text="${info.get('java').runtime.name + ' ' + info.get('java').runtime.version}">N/A</span>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+
+            <!-- Java Info -->
+            <tr th:if="${info.containsKey('java')}">
+              <th scope="row">Java</th>
+              <td>
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <strong>Versão: </strong>
+                    <span th:text="${info.get('java').version != null ? info.get('java').version : 'N/A'}"></span>
+                  </li>
+                  <li>
+                    <strong>Vendor: </strong>
+                    <span th:text="${info.get('java').vendor != null ? info.get('java').vendor : 'N/A'}"></span>
+                  </li>
+                  <li>
+                    <strong>Runtime: </strong>
+                    <span th:text="${info.get('java').runtime != null ? info.get('java').runtime.name + ' ' + info.get('java').runtime.version : 'N/A'}"></span>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+
+            <!-- Build Info -->
+            <tr th:if="${info.containsKey('build')}">
+              <th scope="row">Build</th>
+              <td>
+                <ul class="list-unstyled mb-0">
+                  <li th:each="buildDetail : ${info.get('build').entrySet()}"
+                      th:if="${buildDetail.value != null}">
+                    <strong th:text="${buildDetail.key} + ': '"></strong>
+                    <span th:text="${buildDetail.value}"></span>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+
+            <!-- OS Info -->
+            <tr th:if="${info.containsKey('os')}">
+              <th scope="row">Sistema Operacional</th>
+              <td>
+                <ul class="list-unstyled mb-0">
+                  <li th:each="osDetail : ${info.get('os').entrySet()}"
+                      th:if="${osDetail.value != null}">
+                    <strong th:text="${osDetail.key} + ': '"></strong>
+                    <span th:text="${osDetail.value}"></span>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Métricas -->
+      <div class="card p-4">
+        <h2 class="titulo">Métricas do Sistema</h2>
+
+        <div class="row mb-4">
+          <div class="col-md-4 mb-3">
+            <select id="metricSelector" class="form-select">
+              <option value="">Selecione uma métrica</option>
+              <option th:if="${metricsNames.names != null}"
+                      th:each="metricName : ${metricsNames.names}"
+                      th:value="${metricName}"
+                      th:text="${metricName}">metric.name</option>
+            </select>
+          </div>
+          <div class="col-md-8">
+            <button id="refreshMetric" class="btn btn-outline-primary" disabled>
+              <i class="bi bi-arrow-clockwise"></i> Atualizar
+            </button>
+          </div>
+        </div>
+
+        <div id="metricDetails" class="bg-light p-3 rounded d-none">
+          <!-- Será preenchido via AJAX -->
+        </div>
+      </div>
+
+    </div></div></div>
+</body>
+</html>

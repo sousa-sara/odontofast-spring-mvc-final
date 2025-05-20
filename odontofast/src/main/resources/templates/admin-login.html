@@ -4,6 +4,11 @@
 <body>
 <div class="auth-container">
     <div class="auth-card">
+        <div class="text-start mb-3">
+            <a href="/" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left"></i> <span th:text="#{geral.botao.voltar-inicio}">Voltar à Página Inicial</span>
+            </a>
+        </div>
         <h1>Login de Administrador</h1>
 
         <form th:action="@{/admin/process-login}" method="post">
@@ -23,12 +28,6 @@
 
             <button type="submit" class="btn btn-primary">Entrar como Administrador</button>
         </form>
-
-        <div class="text-link mt-3">
-            <a href="/" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left"></i> Voltar para Seleção de Perfil
-            </a>
-        </div>
     </div>
 </div>
 </body>

@@ -10,6 +10,13 @@
         <!-- Toast dinâmico -->
         <div th:replace="~{fragments/toast :: toast}"></div>
         <div class="auth-card">
+            <!-- Botão para voltar à página inicial -->
+            <div class="text-start mb-3">
+                <a href="/" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> <span th:text="#{geral.botao.voltar-inicio}">Voltar à Página Inicial</span>
+                </a>
+            </div>
+
             <h1 th:text="#{login.titulo}">Login</h1>
             <form th:action="@{/dentista/login}" method="post">
                 <div class="mb-3">

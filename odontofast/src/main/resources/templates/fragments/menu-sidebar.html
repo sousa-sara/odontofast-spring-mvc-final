@@ -34,10 +34,11 @@
                 <span class="nav-text">Notificações</span>
             </a>
 
-            <!-- Administração (visível apenas para admin) -->
-            <a class="nav-link" th:classappend="${activePage == 'admin' ? 'active' : ''}" href="/admin/dashboard" sec:authorize="hasRole('ADMIN')">
-                <i class="bi bi-gear"></i>
-                <span class="nav-text" th:text="#{menu.admin}">Administração</span>
+            <!-- No menu lateral dentro da seção apenas para administradores -->
+            <a class="nav-link" th:classappend="${activePage == 'monitoring' ? 'active' : ''}"
+               href="/admin/monitoring" sec:authorize="hasRole('ADMIN')">
+                <i class="bi bi-speedometer2"></i>
+                <span class="nav-text">Monitoramento</span>
             </a>
 
 
@@ -52,11 +53,6 @@
                 <span class="nav-text" th:text="#{menu.sair}">Sair</span>
             </a>
         </nav>
-        <li sec:authorize="hasRole('ADMIN')">
-            <a th:href="@{/admin/dashboard}" th:classappend="${activePage == 'admin'} ? 'active' : ''">
-                <i class="bi bi-gear"></i> <span th:text="#{menu.admin}">Administração</span>
-            </a>
-        </li>
 
         <!-- Seletor de idioma -->
         <div class="language-selector-sidebar">
