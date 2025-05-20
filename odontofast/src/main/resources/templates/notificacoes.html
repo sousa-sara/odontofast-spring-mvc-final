@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head"></head>
+
+<body>
+<div class="dashboard">
+    <div th:replace="~{fragments/menu-sidebar :: menu-sidebar(activePage='notificacoes')}"></div>
+    <div class="main-content">
+        <div>
+            <h1 class="fs-2 mb-4">Painel de Notificações</h1>
+            
+            <div class="card p-4 mb-4">
+                <h2 class="titulo">Histórico de Notificações</h2>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Mensagem</th>
+                                <th>Data/Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="notificacao : ${notificacoes}">
+                                <td>
+                                    <span class="badge"
+                                        th:classappend="${notificacao.tipo == 'NOVO_CADASTRO' ? 'bg-success' : 
+                                                        notificacao.tipo == 'PERFIL_ATUALIZADO' ? 'bg-warning' : 
+                                                        'bg-info'}"
+                                        th:text="${notificacao.tipo}">
+                                        Tipo
+                                    </span>
+                                </td>
+                                <td th:text="${notificacao.mensagem}">Mensagem da notificação</td>
+                                <td th:text="${#dates.format(notificacao.data, 'dd/MM/yyyy HH:mm')}">Data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card p-4">
+                <h2 class="titulo">Enviar Notificação de Teste</h2>
+                <form th:action="@{/notificacoes/enviar-teste}" method="post">
+                    <div class="mb-3">
+                        <label for="mensagem" class="form-label">Mensagem</label>
+                        <input type="text" class="form-control" id="mensagem" name="mensagem" 
+                            placeholder="Digite uma mensagem de teste" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar Notificação</button>
+                </form>
+            </div>
+        </div>
+        <footer th:replace="fragments/footer"></footer>
+    </div>
+</div>
+</body>
+</html>

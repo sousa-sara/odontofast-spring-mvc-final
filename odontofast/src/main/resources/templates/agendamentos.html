@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head"></head>
+
+<body>
+
+<div class="dashboard">
+    <div th:replace="~{fragments/menu-sidebar :: menu-sidebar(activePage='agendamentos')}"></div>
+    <div class="main-content">
+        <div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="fs-2">
+                    <span th:text="#{agendamentos.titulo}">Agenda -</span>
+                    <span th:text="#{geral.dataAtualDesc(${formattedDate})}">12 de maio de 2025</span>
+                </h1>
+                <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addAppointmentModal" th:text="#{botao.novoAgendamento}">+ Novo Agendamento</button>
+            </div>
+            <div class="mb-4">
+                <button class="btn btn-outline-primary btn-filter" th:text="#{agendamentos.status.confirmados}">Confirmadas</button>
+                <button class="btn btn-outline-warning btn-filter" th:text="#{agendamentos.status.pendentes}">Pendentes</button>
+                <button class="btn btn-outline-danger btn-filter" th:text="#{agendamentos.status.cancelados}">Canceladas</button>
+            </div>
+            <div class="card p-4">
+                <h2 class="titulo" th:text="#{agendamentos.lista.titulo}">Agendamentos do Dia</h2>
+                <div class="appointment-list">
+                    <div class="appointment-item d-flex justify-content-between" 
+                        th:each="appointment : ${appointments}">
+                        <span class="text-body-secondary" 
+                            th:text="#{agendamentos.item(${appointment.time}, ${appointment.patientName}, #{procedimentos.__${appointment.procedure}__})}">
+                            09:00 - Maria Silva - Limpeza
+                        </span>
+                        <span class="badge"
+                            th:classappend="${appointment.status == 'confirmado' ? 'bg-success' : 
+                                            appointment.status == 'pendente' ? 'bg-warning' : 
+                                            'bg-danger'}"
+                            th:text="#{agendamentos.status.__${appointment.status}__}">
+                            Confirmada
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <footer th:replace="fragments/footer"></footer>
+</div>
+</div>
+
+<!-- Modal para Novo Agendamento -->
+<div class="modal fade" id="addAppointmentModal" tabindex="-1" aria-labelledby="addAppointmentModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title titulo" id="addAppointmentModalLabel" th:text="#{botao.novoAgendamento}">Novo Agendamento</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form>
+                  <div class="mb-3">
+                      <label for="patient-name" class="form-label" th:text="#{modal.novoAgendamento.campo.paciente}">Nome do Paciente</label>
+                      <input type="text" class="form-control" id="patient-name" placeholder="Ex.: Maria Silva">
+                  </div>
+                  <div class="mb-3">
+                      <label for="appointment-time" class="form-label" th:text="#{modal.novoAgendamento.campo.horario}">Horário</label>
+                      <input type="time" class="form-control" id="appointment-time">
+                  </div>
+                  <div class="mb-3">
+                      <label for="procedure" class="form-label" th:text="#{modal.novoAgendamento.campo.procedimento}">Procedimento</label>
+                      <select class="form-select" id="procedure">
+                          <option th:text="#{procedimentos.limpeza}">Limpeza</option>
+                          <option th:text="#{procedimentos.extracao}">Extração</option>
+                          <option th:text="#{procedimentos.clareamento}">Clareamento</option>
+                          <option th:text="#{procedimentos.consulta}">Consulta</option>
+                      </select>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" th:text="#{botao.cancelar}">Cancelar</button>
+              <button type="button" class="btn btn-primary" th:text="#{botao.adicionar}">Adicionar</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+</body>
+</html>
