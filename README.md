@@ -14,31 +14,49 @@ O Odontofast é uma aplicação web MVC desenvolvida como parte do Challenge da 
 
 A solução foi projetada para ser integrada posteriormente com um aplicativo mobile utilizado pelos pacientes, criando um ecossistema completo de gestão odontológica.
 
-## Arquitetura da Solução
+# Arquitetura da Solução Odontofast
 
-O projeto segue uma arquitetura MVC (Model-View-Controller) multicamada, com as seguintes tecnologias e componentes principais:
+## Padrão Arquitetural
+* **Model-View-Controller (MVC)**: Arquitetura multicamada que separa a aplicação em componentes lógicos distintos
 
-### Backend
+## Camadas Principais
 
-- **Java 21**: Linguagem de programação base
-- **Spring Boot 3.4.3**: Framework para desenvolvimento simplificado
-- **Spring MVC**: Implementação do padrão Model-View-Controller
-- **Spring Data JPA**: Camada de acesso a dados utilizando JPA/Hibernate
-- **Spring Security**: Autenticação e autorização baseada em roles (DENTISTA/ADMIN)
-- **RabbitMQ**: Sistema de mensageria para notificações assíncronas
-- **Spring AI**: Integração com Ollama para recursos de IA na assistência de anamnese
-- **Actuator**: Monitoramento de métricas e saúde da aplicação
+### Frontend (View)
+* **Thymeleaf**: Engine de templates para renderização server-side
+* **Bootstrap 5**: Framework CSS responsivo para interface de usuário
+* **JavaScript**: Para interatividade do lado do cliente
 
-### Frontend
+### Backend (Controller e Model)
+* **Java 21**: Linguagem de programação base
+* **Spring Boot 3.4.3**: Framework para desenvolvimento simplificado
+* **Spring MVC**: Implementação do padrão Model-View-Controller
+* **Spring Data JPA**: Camada de acesso a dados utilizando JPA/Hibernate
+* **Spring Security**: Autenticação e autorização baseada em roles (DENTISTA/ADMIN)
 
-- **Thymeleaf**: Engine de templates para renderização server-side
-- **Bootstrap 5**: Framework CSS responsivo
-- **JavaScript**: Interatividade do lado do cliente
+### Persistência de Dados
+* **Oracle Database**: Armazenamento persistente de dados
+* **JPA/Hibernate**: ORM para mapeamento objeto-relacional
 
-### Banco de Dados
+## Componentes Adicionais
+* **RabbitMQ**: Sistema de mensageria para notificações assíncronas
+* **Spring AI**: Integração com Ollama para recursos de IA na assistência de anamnese
+* **Spring Actuator**: Monitoramento de métricas e saúde da aplicação
 
-- **Oracle Database**: Armazenamento persistente de dados
-- **JPA/Hibernate**: ORM para mapeamento objeto-relacional
+## Estrutura Organizacional do Código
+* **Controllers**: Gerenciam as requisições HTTP e direcionam o fluxo da aplicação
+* **Models**: Entidades de domínio que representam objetos de negócio (JPA)
+* **Repositories**: Interfaces para acesso aos dados
+* **Services**: Encapsulam a lógica de negócios
+* **Views**: Templates Thymeleaf que renderizam a interface do usuário
+
+## Fluxo de Dados
+1. **Requisição HTTP**: O cliente faz uma requisição que é recebida pelo controlador
+2. **Processamento**: O controlador processa a requisição e aciona serviços apropriados
+3. **Acesso a Dados**: Os serviços utilizam repositórios para acessar e manipular dados
+4. **Resposta**: O controlador seleciona a view apropriada e envia os dados para renderização
+5. **Página HTML**: A view renderiza os dados em HTML que é retornado ao cliente
+
+Esta arquitetura proporciona uma separação clara de responsabilidades, facilitando a manutenção, testabilidade e escalabilidade da aplicação. A combinação de Spring Boot com Spring MVC oferece uma estrutura robusta para desenvolvimento web, enquanto componentes como RabbitMQ e Spring AI adicionam capacidades avançadas de comunicação assíncrona e inteligência artificial.
 
 ## Estrutura do Projeto
 
