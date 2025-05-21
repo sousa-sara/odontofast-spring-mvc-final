@@ -1,151 +1,247 @@
-# Odontofast - Aplicação Web com Spring MVC para Dentistas
+# Odontofast
 
-**Odontofast** Spring MVC, é uma aplicação web MVC desenvolvida como parte da 3ª Sprint do Challenge para a Odontoprev. Este projeto utiliza o framework **Spring Boot** com **Thymeleaf** para criar templates dinâmicos, integrado a um banco de dados **Oracle** para persistência de dados. A aplicação visa facilitar a gestão da rotina de dentistas com seus pacientes, oferecendo funcionalidades como cadastro, login, dashboard e gerenciamento de agendamentos.
+**Aplicação Web com Spring MVC para Gestão Odontológica**
 
-## Descrição do Projeto
-O **OdontoFast** é uma aplicação web voltada para dentistas, parcialmente finalizada, que oferece suporte à gestão de suas atividades diárias. Até o momento, o projeto inclui:
+## Objetivo
 
-## Tecnologias Utilizadas
+O Odontofast é uma aplicação web MVC desenvolvida como parte do Challenge da Odontoprev, com o objetivo de digitalizar e otimizar a gestão da rotina de dentistas com seus pacientes. A proposta busca resolver problemas comuns enfrentados pelos profissionais odontológicos, oferecendo:
 
-O projeto utiliza as seguintes tecnologias:
+- Gerenciamento centralizado e digital de agendamentos
+- Monitoramento eficiente de pacientes e consultas
+- Acesso rápido a informações de perfil profissional
+- Assistência na elaboração de anamnese personalizada para pacientes
+- Sistema de notificações em tempo real
+
+A solução foi projetada para ser integrada posteriormente com um aplicativo mobile utilizado pelos pacientes, criando um ecossistema completo de gestão odontológica.
+
+## Arquitetura da Solução
+
+O projeto segue uma arquitetura MVC (Model-View-Controller) multicamada, com as seguintes tecnologias e componentes principais:
 
 ### Backend
-- **Java 21** - Linguagem de programação utilizada no desenvolvimento.
-- **Spring Boot 3.4.3** - Framework para desenvolvimento rápido e simplificado.
-- **Spring MVC** - Arquitetura para desenvolvimento de aplicações web seguindo o padrão Model-View-Controller.
-- **Spring Boot Starter Web** - Módulo essencial para criação de APIs REST e aplicações web.
-- **Spring Boot Starter Data JPA** - Facilita a integração com bancos de dados usando JPA e Hibernate.
-- **Spring Boot DevTools** - Ferramenta que melhora a experiência de desenvolvimento, com recarga automática.
-- **Spring Boot Starter Thymeleaf** - Template engine para renderização dinâmica de páginas HTML no servidor.
 
-### Banco de Dados
-- **Oracle Database** - Banco de dados utilizado para armazenamento de informações.
-- **Oracle JDBC Driver (ojdbc11)** - Driver JDBC para conexão da aplicação com o banco de dados Oracle.
-
-### Build e Gerenciamento de Dependências
-- **Maven** - Ferramenta utilizada para gerenciamento de dependências, build e empacotamento do projeto.
+- **Java 21**: Linguagem de programação base
+- **Spring Boot 3.4.3**: Framework para desenvolvimento simplificado
+- **Spring MVC**: Implementação do padrão Model-View-Controller
+- **Spring Data JPA**: Camada de acesso a dados utilizando JPA/Hibernate
+- **Spring Security**: Autenticação e autorização baseada em roles (DENTISTA/ADMIN)
+- **RabbitMQ**: Sistema de mensageria para notificações assíncronas
+- **Spring AI**: Integração com Ollama para recursos de IA na assistência de anamnese
+- **Actuator**: Monitoramento de métricas e saúde da aplicação
 
 ### Frontend
-- **Thymeleaf** - Template engine para geração dinâmica de páginas HTML.
-- **HTML, CSS e JavaScript** - Tecnologias utilizadas para a interface do usuário.
 
-## Instrução de Como Rodar a Aplicação  
+- **Thymeleaf**: Engine de templates para renderização server-side
+- **Bootstrap 5**: Framework CSS responsivo
+- **JavaScript**: Interatividade do lado do cliente
 
-   1. Clone o repositório:
-      ```bash
-      git clone https://github.com/sousa-sara/odontofast-spring-mvc.git
-      ```
-   2. Acesse o diretório do projeto:
-      ```bash
-      cd odontofast-spring-mvc
-      cd odontofast
-      ```
-   3. Certifique-se de ter o JDK 21 e Maven instalados.
-   4. Compile e inicie a aplicação:
-      ```bash
-      mvn spring-boot:run
-      ```
-   5. Acesse a aplicação em: `http://localhost:8080/dentista/login` e para autenticar-se:
-   -  No campo CRO, digite: **CRO12345**
-   -  No campo Senha, digite: **senha123**
+### Banco de Dados
 
-## Rotas Implementadas
-  - **dentista/login**: Página de autenticação.
-  - **dentista/cadastro**: Formulário para registro de novos dentistas.
-  - **dentista/home**: Página principal com uma sidebar contendo as opções: *Painel Principal*, *Perfil*, *Agendamentos*, *Relatórios* e *Pacientes*.
-  - **dentista/perfil**: Página para atualização de informações sobre dentista.
+- **Oracle Database**: Armazenamento persistente de dados
+- **JPA/Hibernate**: ORM para mapeamento objeto-relacional
 
-### Funcionalidades da Home
-**Painel Principal**:
-   - Um dashboard com informações cruciais:
-   - Quantidade de pacientes a serem atendidos hoje.
-   - Quantidade de consultas de emergência.
-   - Quantidade de consultas pendentes.
-   - Agenda do dia, exibindo horário, nome do paciente e tratamento resumido.
-**Perfil**:
-   - Atualização de dados pessoais (nome, CRO, email e telefone).
-   - Opção para alterar a senha.
-**Agendamentos**:
-   - Filtro para visualizar agendamentos confirmados, pendentes ou cancelados.
-   - Prévia dos agendamentos com horário, nome do paciente, tratamento e status.
-   - Formulário para criar novos agendamentos com campos: nome do paciente, horário e tratamento.
-**Relatórios e Pacientes**:
-   - Páginas em desenvolvimento e que serão entregues na Sprint 4, planejadas para integração com dados enviados por pacientes via aplicativo mobile.
+## Estrutura do Projeto
 
-### Funcionalidades com Persistência de Dados
-- **Cadastro e Login**: permite que dentistas criem contas e façam login.
-- **Perfil**: localizada nas opções do sidebar, possui persistência no banco de dados Oracle para que seja feita a atualização dos campos: Nome, CRO, Email e Telefone.
+```
+odontofast/
+├── src/main/java/com/example/odontofast/
+│   ├── config/          # Configurações (Security, RabbitMQ, Actuator)
+│   ├── controller/      # Controladores MVC e REST
+│   ├── model/           # Entidades de domínio (JPA)
+│   ├── repository/      # Interfaces de repositório (Spring Data)
+│   └── service/         # Lógica de negócios e serviços
+└── src/main/resources/
+    ├── static/          # Recursos estáticos (CSS, JS, imagens)
+    ├── templates/       # Templates Thymeleaf
+    └── application.properties  # Configurações da aplicação
+```
 
-### Testes
-- **Cadastro (CREATE)**
-Acesse http://localhost:8080/dentista/cadastro
+## Funcionamento da Aplicação
 
-Preencha: Nome: "João Silva", CRO: "CRO121212", Email: "joao@exemplo.com", Telefone: "11987654321", Senha: "123456".
+### Autenticação e Autorização
 
-Clique em "Cadastrar" → Redirecionado para /login.
+- O sistema implementa autenticação baseada em formulário com Spring Security
+- Dois perfis de acesso: Dentista (padrão) e Administrador (acesso a monitoramento)
+- Login realizado com CRO (número de registro odontológico) e senha
 
-- **Login (READ)**
-Acesse http://localhost:8080/dentista/login
+### Fluxo Principal
 
-Insira CRO: "CRO121212", Senha: "123456" → Redirecionado para /home.
+1. **Login/Cadastro**: O dentista acessa o sistema com suas credenciais
+2. **Dashboard**: Exibe um resumo da agenda diária, consultas pendentes e emergenciais
+3. **Agendamentos**: Permite visualizar e gerenciar consultas (confirmar, cancelar, adicionar)
+4. **Perfil**: O usuário pode atualizar suas informações cadastrais
 
-- **Atualizar Perfil (UPDATE)**
-Acesse http://localhost:8080/dentista/perfil
+## Funcionalidades Implementadas
 
-Atualize os campos: Nome, CRO, Email e Telefone.
+### 1. Gerenciamento de Usuários
+- Cadastro de novos dentistas
+- Atualização de perfil (nome, CRO, email, telefone)
+- Autenticação segura
 
-### Objetivo Futuro
-A aplicação será integrada a um aplicativo mobile para pacientes, permitindo que eles enviem dados (ex.: solicitações de agendamento) que serão consultados e gerenciados pelo dentista na interface web.
+### 2. Painel Principal (Dashboard)
+- Visualização rápida das consultas do dia
+- Indicadores de desempenho (pacientes, emergências, pendências)
 
-## Requisitos da 3ª Sprint
-- **Aplicação MVC**: Desenvolvida com Spring Boot e Thymeleaf.
-- **Templates Dinâmicos**: Implementados em todas as páginas (login, cadastro, home, painel, perfil e agendamentos).
-- **Integração com Banco de Dados**: Conexão com Oracle para persistência de dados em cadastro, login e atualização de perfil.
-- **CRUDs Implementados**:
-  1. **CRUD de Dentistas**: Cadastro (CREATE), consulta (READ) e atualização (UPDATE) de perfil.
+### 3. Gestão de Agendamentos
+- Visualização da agenda por status (confirmado, pendente, cancelado)
+- Adição de novos agendamentos via modal
 
-## Resumo da Estrutura do Projeto OdontoFast
+### 4. Assistente de Anamnese com IA
+- Geração de perguntas complementares para anamnese baseadas nas informações iniciais do paciente
+- Integração com modelo de IA para personalização das questões
+- Exportação das perguntas geradas (impressão/área de transferência)
 
-### `controller/`
-- **Propósito**: Controladores MVC e REST (ex.: `LoginController`).
-- **Motivo**: Gerencia rotas e requisições HTTP.
+### 5. Sistema de Notificações
+- Implementação de mensageria assíncrona com RabbitMQ
+- Notificações em tempo real para eventos do sistema (cadastros, atualizações)
 
-### `model/`
-- **Propósito**: Entidades (ex.: `Dentista`, `Especialidade`).
-- **Motivo**: Representa dados e mapeia o banco.
+### 6. Monitoramento (Área Administrativa)
+- Visualização de métricas do sistema via Spring Actuator
+- Monitoramento de saúde dos componentes (banco de dados, mensageria)
+- Informações detalhadas sobre a aplicação
 
-### `repository/`
-- **Propósito**: Acesso ao banco (ex.: `DentistaRepository`).
-- **Motivo**: Abstrai interação com Oracle (JDBC/JPA).
+### 7. Internacionalização
+- Suporte a idiomas (Português e Inglês)
+- Tradução de interfaces e mensagens via arquivos de propriedades
 
-### `service/`
-- **Propósito**: Lógica de negócios (ex.: `DentistaService`).
-- **Motivo**: Separa regras de negócio, melhora reusabilidade.
+## Viabilidade da Solução
 
-### `static/css/`
-- **Propósito**: Arquivos CSS (ex.: `styles.css`).
-- **Motivo**: Estilização servida diretamente pelo Spring.
+A solução apresentada atende diretamente às necessidades dos dentistas no contexto da Odontoprev, oferecendo:
 
-### `templates/`
-- **Propósito**: Templates Thymeleaf (ex.: `login-dentista.html`).
-- **Motivo**: Gera HTML dinâmico com Thymeleaf.
+- **Eficiência operacional**: Reduz o tempo gasto com tarefas administrativas
+- **Qualidade no atendimento**: O assistente de anamnese com IA promove uma avaliação mais completa do paciente
+- **Gestão centralizada**: Unifica em uma única plataforma todas as informações necessárias
+- **Integração futura**: Arquitetura preparada para integração com o app mobile de pacientes
+- **Escalabilidade**: Uso de tecnologias robustas que permitem crescimento
 
-### `application.properties`
-- **Propósito**: Configurações (ex.: conexão Oracle).
-- **Motivo**: Centraliza parâmetros da aplicação.
+A aplicação demonstra viabilidade comercial e técnica por:
+- Utilizar tecnologias modernas e bem estabelecidas no mercado
+- Seguir padrões de desenvolvimento que facilitam manutenção
+- Implementar recursos de valor agregado (IA, mensageria)
+- Possibilitar expansão com novos módulos
 
-### `pom.xml`
-- **Propósito**: Configuração Maven.
-- **Motivo**: Gerencia dependências e build.
+## Estrutura do Projeto
+```
+odontofast/
+├── src/main/java/com/example/odontofast/
+│   ├── config/          # Configurações (Security, RabbitMQ, Actuator)
+│   ├── controller/      # Controladores MVC e REST
+│   ├── model/           # Entidades de domínio (JPA)
+│   ├── repository/      # Interfaces de repositório (Spring Data)
+│   └── service/         # Lógica de negócios e serviços
+└── src/main/resources/
+    ├── static/          # Recursos estáticos (CSS, JS, imagens)
+    ├── templates/       # Templates Thymeleaf
+    └── application.properties  # Configurações da aplicação
+```
 
-### Diagrama Banco de Dados
-- Modelo Lógico
-  
-![Modelo](images-readme/modelo.jpg)
+## Como Executar o Projeto
 
-## Link do Vídeo Explicativo e Demonstrativo
-[Clique aqui](https://drive.google.com/file/d/1RHPD-TXph08g_gEtoAT0D4lvrMLDHns1/view?usp=sharing)
-   
+### Pré-requisitos
+
+- Java JDK 21
+- Maven 3.9+
+- Oracle Database (ou usar H2 para testes locais)
+- RabbitMQ Server (para o sistema de mensageria)
+- Ollama com modelo local (para recursos de IA)
+
+
+### Passos para Execução
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/sousa-sara/odontofast-spring-mvc.git
+```
+
+2. Navegue até o diretório do projeto:
+```bash
+cd odontofast-spring-mvc
+cd odontofast
+```
+
+3. Configure as propriedades do banco de dados e RabbitMQ no arquivo `application.properties`
+
+4. Execute o seguinte comando para iniciar a aplicação:
+```bash
+mvn spring-boot:run
+```
+
+5. Acesse a aplicação em: http://localhost:8080
+
+### Credenciais de Acesso
+
+Para autenticar-se como dentista:
+- **CRO**: CRO12345
+- **Senha**: senha123
+
+Para autenticar-se como administrador:
+- **CRO**: ADMIN9998
+- **Senha**: admin123
+
+## Conclusão
+
+### Resumo do Projeto
+O Odontofast apresenta uma solução robusta para a gestão odontológica, implementando com sucesso o padrão MVC em uma arquitetura distribuída. A utilização do Spring Boot permitiu o desenvolvimento rápido e consistente da aplicação, enquanto a integração com tecnologias avançadas como RabbitMQ e inteligência artificial agregou valor significativo à solução.
+
+### Desafios e Aprendizados
+
+**Desafios Enfrentados:**
+- Implementação do Spring Security com múltiplos perfis (Dentista/Admin)
+- Integração com o Oracle Database em ambientes de desenvolvimento distribuídos
+- Configuração do RabbitMQ para mensageria assíncrona
+- Implementação da internacionalização com troca dinâmica de idiomas
+
+**Aprendizados:**
+- A importância de uma arquitetura bem definida desde o início
+- A vantagem da modularização para evolução incremental do projeto
+- O valor de implementar testes automatizados para garantir a qualidade
+- A necessidade de documentação clara para facilitar o desenvolvimento colaborativo
+
+### Melhorias e Projetos Futuros
+
+Para as próximas iterações do projeto, planejamos:
+- **Integração Mobile**: Desenvolvimento da API REST para comunicação com o app de pacientes
+- **Prontuário Eletrônico**: Implementação de módulo para registro e histórico de procedimentos
+- **BI e Analytics**: Dashboard avançado com métricas de negócio e previsões
+- **Expansão da IA**: Utilização de IA para sugerir tratamentos e identificar padrões
+- **Integração com Planos**: API para verificação de cobertura de planos odontológicos em tempo real
+
+O Odontofast demonstra o potencial da tecnologia para transformar a gestão odontológica, criando um diferencial competitivo para a Odontoprev no mercado.
+
+## Instruções Adicionais para Execução
+
+### Configuração do RabbitMQ
+
+Para utilizar o sistema de notificações, é necessário instalar e configurar o RabbitMQ:
+
+**Instalação com Docker:**
+```bash
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management
+```
+
+**Configuração:**
+* O container Docker do RabbitMQ já estará rodando com as configurações necessárias
+* O aplicativo se conectará automaticamente nas configurações padrão (localhost:5672)
+
+## Configuração do Ollama para IA
+Para utilizar o assistente de anamnese com IA:
+
+**Instalação do Ollama:**
+* Siga as instruções em https://ollama.ai/download
+
+**Configuração do modelo:**
+* Execute: `ollama pull gemma:2b`
+* Verifique se o serviço Ollama está rodando na porta padrão (11434)
+
+**Para Oracle (produção):**
+- Certifique-se de que as credenciais e URL do banco Oracle estejam configuradas corretamente
+
+### Observações Importantes
+
+- O sistema utiliza Java 21, certifique-se de que esta versão está instalada
+- Algumas funcionalidades como o assistente de anamnese necessitam de conexão à internet para funcionamento pleno
+- Em caso de problemas com dependências, execute `mvn clean install` para reconstruir o projeto
+
 ## Integrantes Odontofast
 - Felipe Amador - RM553528
 - Leonardo Oliveira - RM554024
