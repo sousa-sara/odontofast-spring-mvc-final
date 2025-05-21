@@ -120,21 +120,6 @@ A aplicação demonstra viabilidade comercial e técnica por:
 - Implementar recursos de valor agregado (IA, mensageria)
 - Possibilitar expansão com novos módulos
 
-## Estrutura do Projeto
-```
-odontofast/
-├── src/main/java/com/example/odontofast/
-│   ├── config/          # Configurações (Security, RabbitMQ, Actuator)
-│   ├── controller/      # Controladores MVC e REST
-│   ├── model/           # Entidades de domínio (JPA)
-│   ├── repository/      # Interfaces de repositório (Spring Data)
-│   └── service/         # Lógica de negócios e serviços
-└── src/main/resources/
-    ├── static/          # Recursos estáticos (CSS, JS, imagens)
-    ├── templates/       # Templates Thymeleaf
-    └── application.properties  # Configurações da aplicação
-```
-
 ## Como Executar o Projeto
 
 ### Pré-requisitos
