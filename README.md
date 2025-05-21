@@ -245,6 +245,9 @@ Para utilizar o assistente de anamnese com IA:
 - Algumas funcionalidades como o assistente de anamnese necessitam de conexão à internet para funcionamento pleno
 - Em caso de problemas com dependências, execute `mvn clean install` para reconstruir o projeto
 
+## Link do Vídeo de Apresentação 
+[Clique aqui](https://drive.google.com/file/d/1CPazSPb4ZcoWIAu81b68G-8osVaPnKpy/view)
+
 ## Integrantes Odontofast
 - Felipe Amador - RM553528
 - Leonardo Oliveira - RM554024
